@@ -14,7 +14,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DatabaseConnection")));
+{
+    var databasePath = Path.Combine(AppContext.BaseDirectory, "Database", "HubDatabase.db");
+    var connectionString = $"Data Source={databasePath}";
+    options.UseSqlite(connectionString);
+});
+
 builder.Services.AddScoped<AgentRepository>();
 builder.Services.AddScoped<StatusHandlerService>();
 

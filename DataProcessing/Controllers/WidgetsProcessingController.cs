@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using DataProcessing.Models;
 
 namespace WidgetController.Controllers
 {
@@ -7,117 +8,86 @@ namespace WidgetController.Controllers
     [Route("[controller]")]
     public class WidgetController : ControllerBase
     {
-        [HttpGet("getTextWidgetunused")]
-        public IActionResult GetTextWidgetunused()
+        private OutputService _outputService;
+        private InputService _inputService;
+
+        public WidgetController(OutputService outputService, InputService inputService)
         {
-            var data = new
-            {
-                title = "unused",
-                types = "Number",
-                data = new
-                {
-                    percentage = "+8",
-                    value = "408",
-                    status = false
-                }
-            };
-            var jsonData = JsonConvert.SerializeObject(data);
-            return Ok(jsonData);
+            _outputService = outputService;
+            _inputService = inputService;
+        }
+
+        [HttpGet("getTextWidgetunused")]
+        public async Task<IActionResult> GetTextWidgetunused()
+        {
+            return Ok(_outputService.getTextWidgetUnused(await _inputService.getFiles()));
         }
 
         [HttpGet("getGradeWidget")]
-        public IActionResult getGradeWidget()
+        public async Task<IActionResult> getGradeWidget()
         {
-            var data = new
-            {
-                grade = "B"
-            };
-            var jsonData = JsonConvert.SerializeObject(data);
-            return Ok(jsonData);
+            return Ok(_outputService.getGradeWidget(await _inputService.getFiles()));
+        }
+
+        [HttpGet("getTotalMonitored")]
+        public async Task<IActionResult> getTotalMonitored()
+        {
+            return Ok(_outputService.getTotalMonitored(await _inputService.getFiles()));
         }
 
         [HttpGet("getGraphWidget")]
-        public IActionResult getGraphWidget()
+        public async Task<IActionResult> getGraphWidget()
         {
-            var data = new
-            {
-                series = new[] { 20, 32, 23, 15, 10 }
-            };
-            var jsonData = JsonConvert.SerializeObject(data);
-            return Ok(jsonData);
+            return Ok(_outputService.getGraphWidget(await _inputService.getFiles()));
         }
 
         [HttpGet("getTextWidgetbadname")]
-        public IActionResult GetTextWidgetbadname()
+        public async Task<IActionResult> GetTextWidgetbadname()
         {
-            var data = new
-            {
-                title = "badname",
-                types = "Number",
-                data = new
-                {
-                    percentage = "-12",
-                    value = "259",
-                    status = true
-                }
-            };
-            var jsonData = JsonConvert.SerializeObject(data);
-            return Ok(jsonData);
+            return Ok(_outputService.getTextWidgetbadname(await _inputService.getFiles()));
         }
 
         [HttpGet("getTextWidgetduplicate")]
-        public IActionResult GetTextWidgetduplicate()
+        public async Task<IActionResult> GetTextWidgetduplicate()
         {
-            var data = new
-            {
-                title = "duplicate",
-                types = "Number",
-                data = new
-                {
-                    percentage = "+19",
-                    value = "124",
-                    status = false
-                }
-            };
-            var jsonData = JsonConvert.SerializeObject(data);
-            return Ok(jsonData);
-        }
-
-        [HttpGet("getTextWidgetheavy")]
-        public IActionResult GetTextWidgetheavy()
-        {
-            var data = new
-            {
-                title = "heavy",
-                types = "Number",
-                data = new
-                {
-                    percentage = "-5",
-                    value = "86",
-                    status = true
-                }
-            };
-            var jsonData = JsonConvert.SerializeObject(data);
-            return Ok(jsonData);
+            return Ok(_outputService.getTextWidgetduplicate(await _inputService.getFiles()));
         }
 
         [HttpGet("getTextWidgetstorage")]
-        public IActionResult GetTextWidgetstorage()
+        public async Task<IActionResult> GetTextWidgetstorage()
         {
-            var data = new
-            {
-                title = "storage",
-                types = "Graph",
-                data = new
-                {
-                    percentage = "+4",
-                    value = "237/512GB",
-                    valuePercentage = "28.32",
-                    status = false
-                }
-            };
-            var jsonData = JsonConvert.SerializeObject(data);
-            return Ok(jsonData);
+            return Ok(_outputService.getTextWidgetstorage(await _inputService.getFiles()));
+        }
+
+
+        [HttpGet("getOverviewAll")]
+        public async Task<IActionResult> GetOverviewAll()
+        {
+            return Ok(_outputService.getOverviewAll(await _inputService.getFiles()));
+        }
+
+        [HttpGet("getOverviewMisnamed")]
+        public async Task<IActionResult> GetOverviewMisnamed()
+        {
+            return Ok(_outputService.getOverviewMisnamed(await _inputService.getFiles(), await _inputService.getRules()));
+        }
+
+        [HttpGet("getOverviewDuplicate")]
+        public async Task<IActionResult> GetOverviewDuplicate()
+        {
+            return Ok(_outputService.getOverviewDuplicate(await _inputService.getFiles(), await _inputService.getRules()));
+        }
+
+        [HttpGet("getOverviewUnused")]
+        public async Task<IActionResult> GetOverviewUnused()
+        {
+            return Ok(_outputService.getOverviewUnused(await _inputService.getFiles(), await _inputService.getRules()));
+        }
+
+        [HttpGet("getTidyRules")]
+        public async Task<IActionResult> GetTidyRules()
+        {
+            return Ok(_outputService.getTidyRules(await _inputService.getRules()));
         }
     }
 }
