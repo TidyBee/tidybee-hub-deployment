@@ -24,7 +24,7 @@ builder.Services.AddHttpClient<AuthInterceptor>();
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
-// var services = scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.EnsureCreated();
+var services = scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.EnsureCreated();
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<TidyBeeEventsService>();

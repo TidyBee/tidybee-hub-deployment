@@ -7,7 +7,7 @@
                         SourceFile="C:\Users\kiNGB\source\repos\tidybee-hub\wix\postgresql-16.3-1-windows-x64.exe"
                         Permanent="yes"
                         Vital="yes"
-                        InstallCommand='--mode unattended --unattendedmodeui minimal --prefix "C:\Program Files\PostgreSQL" --datadir "C:\Program Files\PostgreSQL\data" --superpassword pass --enable-components server,commandlinetools --disable-components pgAdmin,stackbuilder'
+                        InstallCommand='--mode unattended --unattendedmodeui minimal --prefix "C:\Program Files\PostgreSQL\16" --datadir "C:\Program Files\PostgreSQL\16\data" --superpassword pass --enable-components server,commandlinetools --disable-components pgAdmin,stackbuilder'
                         DetectCondition="PostGreSQLInstalled" />
 
             <MsiPackage SourceFile="C:\Users\kiNGB\source\repos\tidybee-hub\wix\tidybee-hub-installer.msi" />

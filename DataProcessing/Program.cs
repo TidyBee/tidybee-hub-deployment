@@ -25,7 +25,7 @@ builder.Configuration.SetBasePath(AppContext.BaseDirectory)
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
-// var services = scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.EnsureCreated();
+var services = scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.EnsureCreated();
 
 app.UseSwagger();
 app.UseSwaggerUI();
