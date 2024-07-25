@@ -3,8 +3,15 @@ using TidyEvents.Context;
 using TidyEvents;
 using TidyEvents.Interceptors;
 using TidyEvents.Services;
+using Microsoft.Extensions.Hosting.WindowsServices;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (WindowsServiceHelpers.IsWindowsService())
+{
+    builder.Host.UseWindowsService();
+}
 
 // Add services to the container.
 builder.Services.AddDbContext<DatabaseContext>(options =>

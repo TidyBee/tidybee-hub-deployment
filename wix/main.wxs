@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='windows-1252'?>
-<?define ProjectDir="Path\To\Hub\Repository" ?>
+<?define ProjectDir="C:\Users\kiNGB\source\repos\tidybee-hub" ?>
 
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
     <Product Id='*'
@@ -40,11 +40,11 @@
                         <Directory Id='Bin' Name='bin'>
 
                             <Component Id="ServiceStarterExecutable" Guid="620fc2d9-e35a-41f8-bf05-9506b88578c8" Win64="yes">
-                                <File Id="ServiceStarterExe" Source="$(var.ProjectDir)\ServiceStarter\bin\Debug\net7.0\win10-x64\publish\ServiceStarter.exe" KeyPath="yes" />
+                                <File Id="ServiceStarterExe" Source="$(var.ProjectDir)\ServiceStarter\bin\Debug\net7.0\win-x64\publish\ServiceStarter.exe" KeyPath="yes" />
                             </Component>
 
                             <Component Id="ServiceStarterConfig" Guid="7b0e034e-d894-41ff-8087-1d4533e04d1b" Win64="yes">
-                                <File Id="ServiceStarterConfigFile" Source="$(var.ProjectDir)\ServiceStarter\bin\Debug\net7.0\win10-x64\publish\appsettings.json" KeyPath="yes" />
+                                <File Id="ServiceStarterConfigFile" Source="$(var.ProjectDir)\ServiceStarter\bin\Debug\net7.0\win-x64\publish\appsettings.json" KeyPath="yes" />
                             </Component>
 
                             <Component Id="ServiceStarterShortcut" Guid="98adbb7c-31a5-4bca-9658-5ff40e3df51b" Win64="yes">
@@ -58,9 +58,13 @@
                                 </RegistryKey>
                             </Component>
 
+                            <Component Id="SqlFileComponent" Guid="7b0e034e-d894-41ff-8087-1d4533e04d1c" Win64="yes">
+                                <File Id="SqlFile" Source="$(var.ProjectDir)\wix\init-hub-postgres.sql" KeyPath="yes" />
+                            </Component>
+
                             <Directory Id='ApiGatewayDir' Name='ApiGateway'>
                                 <Component Id='ApiGatewayComponent' Guid='907c34ac-8071-4797-a8ce-3683c4e53a35' Win64="yes">
-                                    <File Id='ApiGatewayExe' Source='$(var.ProjectDir)\ApiGateway\bin\Debug\net7.0\win10-x64\publish\ApiGateway.exe' KeyPath="yes" Checksum='yes'/>
+                                    <File Id='ApiGatewayExe' Source='$(var.ProjectDir)\ApiGateway\bin\Debug\net7.0\win-x64\publish\ApiGateway.exe' KeyPath="yes" Checksum='yes'/>
                                     <File Id='ApiGatewayConfig' Source='$(var.ProjectDir)\ApiGateway\appsettings.json' />
                                     <ServiceInstall Id="ApiGatewayServiceInstall" 
                                                     Type="ownProcess" 
@@ -81,10 +85,15 @@
                             </Directory>
 
                             <Directory Id='AuthDir' Name='Auth'>
+                                <Directory Id='DatabaseDir' Name='Database'>
+                                    <Component Id='DatabaseComponent' Guid='a7c5a4b2-2e55-4c0d-94a0-4f4c5d2d1a54' Win64="yes">
+                                        <File Id='AuthDatabase' Source='$(var.ProjectDir)\Auth\Database\HubDatabase.db' KeyPath="yes" Checksum='yes'/>
+                                    </Component>
+                                </Directory>
                                 <Component Id='AuthComponent' Guid='d216addc-7178-478e-bd68-8b21d3bbfd8f' Win64="yes">
-                                    <File Id='AuthExe' Source='$(var.ProjectDir)\Auth\bin\Debug\net7.0\win10-x64\publish\Auth.exe' KeyPath="yes" Checksum='yes'/>
+                                    <File Id='AuthExe' Source='$(var.ProjectDir)\Auth\bin\Debug\net7.0\win-x64\publish\Auth.exe' KeyPath="yes" Checksum='yes'/>
                                     <File Id='AuthConfig' Source='$(var.ProjectDir)\Auth\appsettings.json' />
-                                    <File Id='AuthDatabase' Source='$(var.ProjectDir)\Auth\Database\HubDatabase.db' />
+                                    <File Id='AuthSQLdll' Source='$(var.ProjectDir)\Auth\bin\Debug\net7.0\win-x64\publish\e_sqlite3.dll' />
                                     <ServiceInstall Id="AuthServiceInstall" 
                                                     Type="ownProcess" 
                                                     Vital="yes" 
@@ -105,7 +114,7 @@
 
                             <Directory Id='DataProcessingDir' Name='DataProcessing'>
                                 <Component Id='DataProcessingComponent' Guid='c74cd5b2-f5da-4491-865d-2d7a5f1f7741' Win64="yes">
-                                    <File Id='DataProcessingExe' Source='$(var.ProjectDir)\DataProcessing\bin\Debug\net7.0\win10-x64\publish\DataProcessing.exe' KeyPath="yes" Checksum='yes'/>
+                                    <File Id='DataProcessingExe' Source='$(var.ProjectDir)\DataProcessing\bin\Debug\net7.0\win-x64\publish\DataProcessing.exe' KeyPath="yes" Checksum='yes'/>
                                     <File Id='DataProcessingConfig' Source='$(var.ProjectDir)\DataProcessing\appsettings.json' />
                                     <ServiceInstall Id="DataProcessingServiceInstall" 
                                                     Type="ownProcess" 
@@ -124,6 +133,29 @@
                                                     Wait="yes" />
                                 </Component>
                             </Directory>
+
+                            <Directory Id='TidyEventsDir' Name='TidyEvents'>
+                                <Component Id='TidyEventsComponent' Guid='4ec2a035-1859-4bc2-8b81-49c632e81968' Win64="yes">
+                                    <File Id='TidyEventsExe' Source='$(var.ProjectDir)\TidyEvents\bin\Debug\net8.0\win-x64\publish\TidyEvents.exe' KeyPath="yes" Checksum='yes'/>
+                                    <File Id='TidyEventsConfig' Source='$(var.ProjectDir)\TidyEvents\appsettings.json' />
+                                    <ServiceInstall Id="TidyEventsServiceInstall" 
+                                                    Type="ownProcess" 
+                                                    Vital="yes" 
+                                                    Name="TidyEventsService" 
+                                                    DisplayName="Tidybee Events Service" 
+                                                    Description="Processes events for Tidybee applications." 
+                                                    Start="demand" 
+                                                    Account="LocalSystem" 
+                                                    ErrorControl="ignore" 
+                                                    Interactive="no"/>
+                                    <ServiceControl Id="StartTidyEventsService" 
+                                                    Stop="both" 
+                                                    Remove="uninstall" 
+                                                    Name="TidyEventsService" 
+                                                    Wait="yes" />
+                                </Component>
+                            </Directory>
+
                         </Directory>
                     </Directory>
             </Directory>
@@ -133,10 +165,13 @@
             <ComponentRef Id='ApiGatewayComponent' />
             <ComponentRef Id='AuthComponent' />
             <ComponentRef Id='DataProcessingComponent' />
+            <ComponentRef Id='TidyEventsComponent' />
             <ComponentRef Id='ServiceStarterExecutable' />
             <ComponentRef Id='ServiceStarterShortcut' />
             <ComponentRef Id='ServiceStarterConfig' />
             <ComponentRef Id='SetEnvVar' />
+            <ComponentRef Id='SqlFileComponent' />
+            <ComponentRef Id='DatabaseComponent' />
         </Feature>
         
     </Product>

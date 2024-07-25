@@ -1,0 +1,16 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Bundle Name="tidybee-hub" Version="1.0.0.0" Manufacturer="TidyBee" UpgradeCode="93fd272c-72da-4752-91b2-c72e04f717bb">
+        <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+
+        <Chain>
+             <ExePackage Id="PostgreSQL"
+                        SourceFile="C:\Users\kiNGB\source\repos\tidybee-hub\wix\postgresql-16.3-1-windows-x64.exe"
+                        Permanent="yes"
+                        Vital="yes"
+                        InstallCommand='--mode unattended --unattendedmodeui minimal --prefix "C:\Program Files\PostgreSQL\16" --datadir "C:\Program Files\PostgreSQL\16\data" --superpassword pass --enable-components server,commandlinetools --disable-components pgAdmin,stackbuilder'
+                        DetectCondition="PostGreSQLInstalled" />
+
+            <MsiPackage SourceFile="C:\Users\kiNGB\source\repos\tidybee-hub\wix\tidybee-hub-installer.msi" />
+        </Chain>
+    </Bundle>
+</Wix>

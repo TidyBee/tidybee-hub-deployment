@@ -17,6 +17,10 @@
 	  </PackageReference>
 	  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <None Update="Database\HubDatabase.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
